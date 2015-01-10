@@ -68,6 +68,13 @@ tick = ()->
     # 新しい操作ブロックをセットする
     newShape()
 
+isInvalid = (y, x)->
+  return true if y >= ROWS
+  return true if x < 0 || x >= COLS
+  return true if typeof board[y] == 'undefined'
+  return true if typeof board[y][x] == 'undefined'
+  return true if board[y][x]
+
 # // 指定された方向に、操作ブロックを動かせるかどうかチェックする
 # // ゲームオーバー判定もここで行う
 valid = (offsetX, offsetY, newCurrent)->
@@ -80,22 +87,16 @@ valid = (offsetX, offsetY, newCurrent)->
   for y in [0...4]
     for x in [0...4]
       continue unless newCurrent[ y ][ x ]
+      continue unless isInvalid(y + offsetY, x + offsetX)
 
-      if typeof board[y + offsetY] == 'undefined' ||
-        typeof board[y + offsetY][x + offsetX] == 'undefined' ||
-        board[y + offsetY][x + offsetX] ||
-        x + offsetX < 0 ||
-        y + offsetY >= ROWS ||
-        x + offsetX >= COLS
+      # もし操作ブロックが盤面の上にあったらゲームオーバー
+      if (offsetY == 1 && offsetX - currentX == 0 && offsetY - currentY == 1)
+        console.log('game over')
+        lose = true
 
-          # もし操作ブロックが盤面の上にあったらゲームオーバー
-          if (offsetY == 1 && offsetX - currentX == 0 && offsetY - currentY == 1)
-            console.log('game over')
-            lose = true
+      return false
 
-          return false
-
-  return true
+  true
 
 # 操作ブロックを盤面にセットする関数
 freeze = ()->
