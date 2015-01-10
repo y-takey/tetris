@@ -31,10 +31,8 @@ shapes = [
 colors = ['cyan', 'orange', 'blue', 'yellow', 'red', 'green', 'purple']
 
 init = ()->
-  for y in [0...ROWS]
-    board[y] = []
-    for x in [0...COLS]
-      board[y][x] = 0
+  board = for y in [0...ROWS]
+    0 for x in [0...COLS]
 
 # shapesからランダムにブロックのパターンを出力し、盤面の一番上へセットする
 newShape = ()->
@@ -42,13 +40,10 @@ newShape = ()->
   id = Math.floor( Math.random() * shapes.length )
   shape = shapes[id]
   # パターンを操作ブロックへセットする
-  current = []
-
-  for y in [0...4]
-    current[y] = [];
+  current = for y in [0...4]
     for x in [0...4]
       i = 4 * y + x
-      current[y][x] = if shape[i] then id + 1 else 0
+      if shape[i] then id + 1 else 0
 
   # ブロックを盤面の上のほうにセットする
   currentX = 5
@@ -156,13 +151,8 @@ keyPress = (key)->
 
 # 操作ブロックを回す処理
 rotate = (current)->
-  newCurrent = []
   for y in [0...4]
-    newCurrent[ y ] = []
-    for x in [0...4]
-      newCurrent[ y ][ x ] = current[ 3 - x ][ y ]
-
-  newCurrent
+    current[ 3 - x ][ y ] for x in [0...4]
 
 newGame = ()->
   # ゲームタイマーをクリア
