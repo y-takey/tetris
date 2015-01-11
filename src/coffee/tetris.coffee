@@ -1,7 +1,5 @@
 board = require './tetris-board'
 block = require './tetris-block'
-controller = require './tetris-controller'
-controller.bind()
 
 # 一番上までいっちゃったかどうか
 lose = false

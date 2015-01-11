@@ -1,3 +1,6 @@
+controller = require './tetris-controller'
+controller.bind()
+
 # 盤面情報
 board = null
 # 横10、縦20マス
