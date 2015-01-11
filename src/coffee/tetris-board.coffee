@@ -44,8 +44,7 @@ valid = (offsetX, offsetY, newCurrent)->
 
       # もし操作ブロックが盤面の上にあったらゲームオーバー
       if (offsetY == 1 && offsetX - currentX == 0 && offsetY - currentY == 1)
-        console.log('game over')
-        lose = true
+        throw new Error("game over");
 
       return false
 
