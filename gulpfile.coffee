@@ -9,11 +9,16 @@ haml = require('gulp-haml')
 less = require('gulp-less')
 
 webpackConfig =
-  entry: './src/tetris.js'
+  entry: './src/coffee/main'
   output:
     filename: 'all.min.js'
   resolve:
     extensions: ['', '.js', '.coffee']
+  module:
+    loaders: [
+      test: /\.coffee$/
+      loader: 'coffee-loader'
+    ]
 
 gulp.task 'html', ->
   gulp.src('./src/html/index.haml')
@@ -30,16 +35,8 @@ gulp.task 'css', ->
     .pipe(less())
     .pipe(gulp.dest('dist/stylesheets'))
 
-gulp.task 'js', ->
-  gulp.src('./src/coffee/*.coffee')
-    .pipe(plumber())
-    .pipe(concat('tetris.js'))
-    .pipe(coffee())
-    # .pipe(uglify())
-    .pipe(gulp.dest('./src'))
-
-gulp.task 'webpack', ['js'], ->
-  gulp.src('./src/*.js')
+gulp.task 'webpack', ->
+  gulp.src(webpackConfig.entry)
     .pipe(webpack(webpackConfig))
     .pipe(gulp.dest('dist/js'))
 
