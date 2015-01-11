@@ -1,22 +1,22 @@
 controller = require './tetris-controller'
 
-# 盤面情報
-board = null
+# キャンバスのサイズ
+W = 300
+H = 600
 # 横10、縦20マス
 COLS = 10
 ROWS = 20
+# マスの幅
+BLOCK_W = W / COLS
+BLOCK_H = H / ROWS
+
 # キャンバス
 canvas = document.getElementsByTagName( 'canvas' )[ 0 ]
 # コンテクスト
 ctx = canvas.getContext( '2d' )
 clearSound = document.getElementById('clearsound')
-
-# キャンバスのサイズ
-W = 300
-H = 600
-# マスの幅を設定
-BLOCK_W = W / COLS
-BLOCK_H = H / ROWS
+# 盤面情報
+board = null
 # 今操作しているブロックの位置
 currentX = null
 currentY = null
