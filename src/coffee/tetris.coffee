@@ -6,7 +6,7 @@ interval = null
 
 tick = ()->
   try
-    entryBlock() unless board.fallBlock()
+    entryBlock() unless board.moveDown()
   catch error
     console.log(error)
     newGame()
@@ -38,7 +38,6 @@ newGame = ()->
   clearInterval(interval)
   board.init()
   entryBlock()
-  # 250ミリ秒ごとにtickという関数を呼び出す
   interval = setInterval( tick, 250 )
 
 module.exports =

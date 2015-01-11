@@ -1,5 +1,4 @@
 controller = require './tetris-controller'
-controller.bind()
 
 # 盤面情報
 board = null
@@ -57,7 +56,17 @@ freeze = ()->
       if current[ y ][ x ]
         board[ y + currentY ][ x + currentX ] = current[ y ][ x ]
 
-fallBlock = ()->
+moveLeft = ()->
+  return unless valid(-1)
+  --currentX
+  render()
+
+moveRight = ()->
+  return unless valid(1)
+  ++currentX
+  render()
+
+moveDown = ()->
   # １つ下へ移動する
   if valid(0, 1)
     ++currentY
@@ -68,7 +77,15 @@ fallBlock = ()->
   freeze()
   # ライン消去処理
   clearLines()
+  render()
   false
+
+rotate = ()->
+  rotated = currentBlock.rotate()
+  return unless valid(0, 0, rotated)
+
+  currentBlock = rotated
+  render()
 
 # 一行が揃っているか調べ、揃っていたらそれらを消す
 clearLines = ()->
@@ -131,8 +148,7 @@ render = ()->
       # マスを描画
       drawBlock( currentX + x, currentY + y )
 
-module.exports =
-
+api =
   init: ()->
     board = for y in [0...ROWS]
       0 for x in [0...COLS]
@@ -146,4 +162,11 @@ module.exports =
     currentY = 0
     currentBlock = block
 
-  fallBlock: fallBlock
+  moveLeft: moveLeft
+  moveRight: moveRight
+  moveDown: moveDown
+  rotate: rotate
+
+controller.bind(api)
+
+module.exports = api
