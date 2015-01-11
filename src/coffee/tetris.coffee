@@ -1,6 +1,5 @@
 board = require './tetris-board'
 block = require './tetris-block'
-renderer = require './tetris-renderer'
 controller = require './tetris-controller'
 controller.bind()
 
@@ -94,8 +93,6 @@ newGame = ()->
   block.generate()
   # 負けフラッグ
   lose = false
-  # 30ミリ秒ごとに状態を描画する関数を呼び出す
-  setInterval(renderer.render, 30)
   # 250ミリ秒ごとにtickという関数を呼び出す
   interval = setInterval( tick, 250 )
 
