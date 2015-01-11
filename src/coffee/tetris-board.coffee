@@ -31,12 +31,9 @@ isInvalid = (y, x)->
 
 # // 指定された方向に、操作ブロックを動かせるかどうかチェックする
 # // ゲームオーバー判定もここで行う
-valid = (offsetX, offsetY, newCurrent)->
-  offsetX ||= 0
-  offsetY ||= 0
+valid = (offsetX = 0, offsetY = 0, newCurrent = currentBlock)->
   offsetX = currentX + offsetX
   offsetY = currentY + offsetY
-  newCurrent ||= currentBlock
 
   newCurrent.eachCell (y, x, cell)->
     return unless cell
