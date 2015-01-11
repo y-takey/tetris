@@ -34,27 +34,25 @@ valid = (offsetX, offsetY, newCurrent)->
   offsetY ||= 0
   offsetX = currentX + offsetX
   offsetY = currentY + offsetY
-  newCurrent ||= current
+  newCurrent ||= currentBlock
 
-  for y in [0...4]
-    for x in [0...4]
-      continue unless newCurrent[ y ][ x ]
-      continue unless isInvalid(y + offsetY, x + offsetX)
+  newCurrent.eachCell (y, x, cell)->
+    return unless cell
+    return unless isInvalid(y + offsetY, x + offsetX)
 
-      # もし操作ブロックが盤面の上にあったらゲームオーバー
-      if (offsetY == 1 && offsetX - currentX == 0 && offsetY - currentY == 1)
-        throw new Error("game over");
+    # もし操作ブロックが盤面の上にあったらゲームオーバー
+    if (offsetY == 1 && offsetX - currentX == 0 && offsetY - currentY == 1)
+      throw new Error("game over");
 
-      return false
+    return false
 
   true
 
 # 操作ブロックを盤面にセットする関数
 freeze = ()->
-  for y in [0...4]
-    for x in [0...4]
-      if current[ y ][ x ]
-        board[ y + currentY ][ x + currentX ] = current[ y ][ x ]
+  currentBlock.eachCell (y, x, cell)->
+    return unless cell
+    board[ y + currentY ][ x + currentX ] = currentBlock.color
 
 moveLeft = ()->
   return unless valid(-1)
@@ -134,19 +132,18 @@ render = ()->
       continue unless board[ y ][ x ]
 
       # マスの種類に合わせて塗りつぶす色を設定
-      ctx.fillStyle = colors[ board[ y ][ x ] - 1 ]
+      ctx.fillStyle = board[ y ][ x ]
       # マスを描画
       drawBlock(x, y)
 
   # 操作ブロックを描画する
-  for y in [0...4]
-    for x in [0...4]
-      continue unless currentBlock[ y ][ x ]
+  currentBlock.eachCell (y, x, cell)->
+    return unless cell
 
-      # マスの種類に合わせて塗りつぶす色を設定
-      ctx.fillStyle = colors[ currentBlock[ y ][ x ] - 1 ]
-      # マスを描画
-      drawBlock( currentX + x, currentY + y )
+    # マスの種類に合わせて塗りつぶす色を設定
+    ctx.fillStyle = currentBlock.color
+    # マスを描画
+    drawBlock( currentX + x, currentY + y )
 
 api =
   init: ()->
