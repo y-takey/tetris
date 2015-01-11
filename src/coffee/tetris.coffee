@@ -7,9 +7,6 @@ controller.bind()
 lose = false
 # ゲームを実行するタイマーを保持する変数
 interval = null
-# 今操作しているブロックの位置
-currentX = null
-currentY = null
 
 tick = ()->
   # １つ下へ移動する
@@ -27,8 +24,7 @@ tick = ()->
       newGame()
       return false
 
-    # 新しい操作ブロックをセットする
-    block.generate()
+    entryBlock()
 
 isInvalid = (y, x)->
   return true if y >= ROWS
@@ -85,12 +81,15 @@ keyPress = (key)->
       # // 回せる場合は回したあとの状態に操作ブロックをセットする
       current = rotated if valid(0, 0, rotated)
 
+entryBlock = ()->
+  # 新しい操作ブロックをセットする
+  board.add(block.generate())
+
 newGame = ()->
   # ゲームタイマーをクリア
   clearInterval(interval)
   board.init()
-  # 操作ブロックをセット
-  block.generate()
+  entryBlock()
   # 負けフラッグ
   lose = false
   # 250ミリ秒ごとにtickという関数を呼び出す

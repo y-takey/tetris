@@ -13,6 +13,10 @@ H = 600
 # マスの幅を設定
 BLOCK_W = W / COLS
 BLOCK_H = H / ROWS
+# 今操作しているブロックの位置
+currentX = null
+currentY = null
+currentBlock = null
 
 # 一行が揃っているか調べ、揃っていたらそれらを消す
 clearLines = ()->
@@ -68,10 +72,10 @@ render = ()->
   # 操作ブロックを描画する
   for y in [0...4]
     for x in [0...4]
-      continue unless current[ y ][ x ]
+      continue unless currentBlock[ y ][ x ]
 
       # マスの種類に合わせて塗りつぶす色を設定
-      ctx.fillStyle = colors[ current[ y ][ x ] - 1 ]
+      ctx.fillStyle = colors[ currentBlock[ y ][ x ] - 1 ]
       # マスを描画
       drawBlock( currentX + x, currentY + y )
 
@@ -83,5 +87,11 @@ module.exports =
 
     # 30ミリ秒ごとに描画
     setInterval(render, 30)
+
+  add: (block)->
+    # ブロックを盤面の上のほうにセットする
+    currentX = 5
+    currentY = 0
+    currentBlock = block
 
   clearLines: clearLines

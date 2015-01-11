@@ -32,11 +32,6 @@ generate = ()->
       i = 4 * y + x
       if shape[i] then id + 1 else 0
 
-  # ブロックを盤面の上のほうにセットする
-  currentX = 5
-  currentY = 0
-
-
 # 操作ブロックを回す処理
 rotate = ()->
   for y in [0...4]
