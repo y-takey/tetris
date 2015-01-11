@@ -4,9 +4,6 @@
 canvas = document.getElementsByTagName( 'canvas' )[ 0 ]
 # コンテクスト
 ctx = canvas.getContext( '2d' )
-# 横10、縦20マス
-COLS = 10
-ROWS = 20
 # キャンバスのサイズ
 W = 300
 H = 600

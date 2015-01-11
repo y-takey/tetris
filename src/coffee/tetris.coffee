@@ -1,9 +1,8 @@
+board = require './tetris-board'
 renderer = require './tetris-renderer'
 controller = require './tetris-controller'
 controller.bind()
 
-# 盤面情報
-board = []
 # 一番上までいっちゃったかどうか
 lose = false
 # ゲームを実行するタイマーを保持する変数
@@ -34,10 +33,6 @@ shapes = [
 # ブロックの色
 colors = ['cyan', 'orange', 'blue', 'yellow', 'red', 'green', 'purple']
 
-init = ()->
-  board = for y in [0...ROWS]
-    0 for x in [0...COLS]
-
 # shapesからランダムにブロックのパターンを出力し、盤面の一番上へセットする
 newShape = ()->
   # ランダムにインデックスを出す
@@ -63,7 +58,7 @@ tick = ()->
     # 操作ブロックを盤面へ固定する
     freeze()
     # ライン消去処理
-    clearLines()
+    board.clearLines()
     if lose
       # もしゲームオーバなら最初から始める
       newGame()
@@ -109,33 +104,6 @@ freeze = ()->
       if current[ y ][ x ]
         board[ y + currentY ][ x + currentX ] = current[ y ][ x ]
 
-# 一行が揃っているか調べ、揃っていたらそれらを消す
-clearLines = ()->
-  y = ROWS
-  while y > 0
-    --y
-
-    rowFilled = true
-
-    # 一行が揃っているか調べる
-    for x in [0...COLS]
-      continue unless board[ y ][ x ] == 0
-      rowFilled = false
-      break
-
-    # もし一行揃っていたら, サウンドを鳴らしてそれらを消す。
-    continue unless rowFilled
-
-    # 消滅サウンドを鳴らす
-    document.getElementById( 'clearsound' ).play()
-    # その上にあったブロックを一つずつ落としていく
-    for yy in [y...0]
-      for x in [0...COLS]
-        board[ yy ][ x ] = board[ yy - 1 ][ x ]
-
-    # 一行落としたのでチェック処理を一つ下へ送る
-    ++y
-
 # キーボードが押された時に呼び出される関数
 keyPress = (key)->
   switch key
@@ -162,8 +130,7 @@ rotate = (current)->
 newGame = ()->
   # ゲームタイマーをクリア
   clearInterval(interval)
-  # 盤面をまっさらにする
-  init()
+  board.init()
   # 操作ブロックをセット
   newShape()
   # 負けフラッグ
