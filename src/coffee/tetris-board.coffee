@@ -35,15 +35,17 @@ valid = (offsetX = 0, offsetY = 0, newCurrent = currentBlock)->
   offsetX = currentX + offsetX
   offsetY = currentY + offsetY
 
-  newCurrent.eachCell (y, x, cell)->
-    return unless cell
-    return unless isInvalid(y + offsetY, x + offsetX)
+  for y in [0...4]
+    for x in [0...4]
 
-    # もし操作ブロックが盤面の上にあったらゲームオーバー
-    if (offsetY == 1 && offsetX - currentX == 0 && offsetY - currentY == 1)
-      throw new Error("game over");
+      continue unless newCurrent.cells[y][x]
+      continue unless isInvalid(y + offsetY, x + offsetX)
 
-    return false
+      # もし操作ブロックが盤面の上にあったらゲームオーバー
+      if (offsetY == 1 && offsetX - currentX == 0 && offsetY - currentY == 1)
+        throw new Error("game over");
+
+      return false
 
   true
 
