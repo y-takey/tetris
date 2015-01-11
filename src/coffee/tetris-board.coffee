@@ -9,6 +9,8 @@ ROWS = 20
 canvas = document.getElementsByTagName( 'canvas' )[ 0 ]
 # コンテクスト
 ctx = canvas.getContext( '2d' )
+clearSound = document.getElementById('clearsound')
+
 # キャンバスのサイズ
 W = 300
 H = 600
@@ -103,7 +105,7 @@ clearLines = ()->
     continue unless rowFilled
 
     # 消滅サウンドを鳴らす
-    document.getElementById( 'clearsound' ).play()
+    clearSound.play()
     # その上にあったブロックを一つずつ落としていく
     for yy in [y...0]
       for x in [0...COLS]
