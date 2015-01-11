@@ -113,7 +113,8 @@ clearLines = ()->
     ++y
 
 # x, yの部分へマスを描画する処理
-drawCell = (x, y)->
+drawCell = (x, y, color)->
+  ctx.fillStyle = color
   args = [BLOCK_W * x, BLOCK_H * y, BLOCK_W - 1 , BLOCK_H - 1]
   ctx.fillRect(args...)
   ctx.strokeRect(args...)
@@ -128,22 +129,14 @@ render = ()->
   # 盤面を描画する
   for x in [0...COLS]
     for y in [0...ROWS]
-      # マスが空、つまり0ではなかったら
-      continue unless board[ y ][ x ]
-
-      # マスの種類に合わせて塗りつぶす色を設定
-      ctx.fillStyle = board[ y ][ x ]
-      # マスを描画
-      drawCell(x, y)
+      cell = board[y][x]
+      # マスが空でなかったら
+      drawCell(x, y, cell) if cell
 
   # 操作ブロックを描画する
   currentBlock.eachCell (y, x, cell)->
     return unless cell
-
-    # マスの種類に合わせて塗りつぶす色を設定
-    ctx.fillStyle = currentBlock.color
-    # マスを描画
-    drawCell(currentX + x, currentY + y)
+    drawCell(currentX + x, currentY + y, currentBlock.color)
 
 api =
   init: ()->
