@@ -86,22 +86,18 @@ rotate = ()->
   currentBlock = rotated
   render()
 
+isRowFilled = (y)->
+
+  return false for x in [0...COLS] when !board[y][x]
+  true
+
 # 一行が揃っているか調べ、揃っていたらそれらを消す
 clearLines = ()->
   y = ROWS
   while y > 0
     --y
 
-    rowFilled = true
-
-    # 一行が揃っているか調べる
-    for x in [0...COLS]
-      continue unless board[ y ][ x ] == 0
-      rowFilled = false
-      break
-
-    # もし一行揃っていたら, サウンドを鳴らしてそれらを消す。
-    continue unless rowFilled
+    continue unless isRowFilled(y)
 
     # 消滅サウンドを鳴らす
     clearSound.play()
