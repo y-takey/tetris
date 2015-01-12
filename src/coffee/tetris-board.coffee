@@ -22,6 +22,19 @@ currentX = null
 currentY = null
 currentBlock = null
 
+class Board
+  constructor: (@rows, @cols)->
+    @cells = for y in [0...rows]
+      0 for x in [0...cols]
+
+  eachCell: (func)->
+    for y in [0...@rows]
+      func(y, x, @cells[y][x]) for x in [0...@cols]
+
+  isRowFilled: (y)->
+    return false for x in [0...@cols] when !@cells[y][x]
+    true
+
 isInvalid = (y, x)->
   return true if y >= ROWS
   return true if x < 0 || x >= COLS
@@ -86,18 +99,13 @@ rotate = ()->
   currentBlock = rotated
   render()
 
-isRowFilled = (y)->
-
-  return false for x in [0...COLS] when !board[y][x]
-  true
-
 # 一行が揃っているか調べ、揃っていたらそれらを消す
 clearLines = ()->
   y = ROWS
   while y > 0
     --y
 
-    continue unless isRowFilled(y)
+    continue unless board.isRowFilled(y)
 
     # 消滅サウンドを鳴らす
     clearSound.play()
@@ -124,11 +132,8 @@ render = ()->
   ctx.strokeStyle = 'black'
 
   # 盤面を描画する
-  for x in [0...COLS]
-    for y in [0...ROWS]
-      cell = board[y][x]
-      # マスが空でなかったら
-      drawCell(x, y, cell) if cell
+  board.eachCell (y, x, cell)->
+    drawCell(x, y, cell) if cell
 
   # 操作ブロックを描画する
   currentBlock.eachCell (y, x, cell)->
@@ -137,8 +142,7 @@ render = ()->
 
 api =
   init: ()->
-    board = for y in [0...ROWS]
-      0 for x in [0...COLS]
+    board = new Board(ROWS, COLS)
 
     # 30ミリ秒ごとに描画
     setInterval(render, 30)
