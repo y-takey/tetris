@@ -50,19 +50,17 @@ class Board
 
   # 一行が揃っているか調べ、揃っていたらそれらを消す
   clearLines: ()->
-    y = ROWS
-    while y > 0
-      --y
 
-      continue unless @isRowFilled(y)
+    livingLines = (@cells[y] for y in [0...@rows] when !@isRowFilled(y))
+    clearedNum = @rows - livingLines.length
 
-      # その上にあったブロックを一つずつ落としていく
-      for yy in [y...0]
-        for x in [0...COLS]
-          board[ yy ][ x ] = board[ yy - 1 ][ x ]
+    if clearedNum
+      for y in [0...clearedNum]
+        @cells[y][x] = 0 for x in [0...@cols]
+      for rows, y in livingLines
+        @cells[clearedNum + y] = rows
 
-      # 一行落としたのでチェック処理を一つ下へ送る
-      ++y
+    clearedNum
 
 # // 指定された方向に、操作ブロックを動かせるかどうかチェックする
 # // ゲームオーバー判定もここで行う
