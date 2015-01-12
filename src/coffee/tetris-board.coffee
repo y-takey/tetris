@@ -46,6 +46,23 @@ class Board
     block.eachCell (offsetY, offsetX, cell)=>
       return unless cell
       @cells[y + offsetY][x + offsetX] = block.color
+    @clearLines()
+
+  # 一行が揃っているか調べ、揃っていたらそれらを消す
+  clearLines: ()->
+    y = ROWS
+    while y > 0
+      --y
+
+      continue unless @isRowFilled(y)
+
+      # その上にあったブロックを一つずつ落としていく
+      for yy in [y...0]
+        for x in [0...COLS]
+          board[ yy ][ x ] = board[ yy - 1 ][ x ]
+
+      # 一行落としたのでチェック処理を一つ下へ送る
+      ++y
 
 # // 指定された方向に、操作ブロックを動かせるかどうかチェックする
 # // ゲームオーバー判定もここで行う
@@ -85,9 +102,9 @@ moveDown = ()->
 
   # もし着地していたら(１つしたにブロックがあったら)
   # 操作ブロックを盤面へ固定する
-  board.land(currentY, currentX, currentBlock)
-  # ライン消去処理
-  clearLines()
+  clearLines = board.land(currentY, currentX, currentBlock)
+  # 消滅サウンドを鳴らす
+  clearSound.play() if clearLines
   render()
   false
 
@@ -97,24 +114,6 @@ rotate = ()->
 
   currentBlock = rotated
   render()
-
-# 一行が揃っているか調べ、揃っていたらそれらを消す
-clearLines = ()->
-  y = ROWS
-  while y > 0
-    --y
-
-    continue unless board.isRowFilled(y)
-
-    # 消滅サウンドを鳴らす
-    clearSound.play()
-    # その上にあったブロックを一つずつ落としていく
-    for yy in [y...0]
-      for x in [0...COLS]
-        board[ yy ][ x ] = board[ yy - 1 ][ x ]
-
-    # 一行落としたのでチェック処理を一つ下へ送る
-    ++y
 
 # x, yの部分へマスを描画する処理
 drawCell = (x, y, color)->
