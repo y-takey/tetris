@@ -1,6 +1,6 @@
 {
   "name": "tetris",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "A very simple HTML5 version of Tetris",
   "main": "main.js",
   "scripts": {
