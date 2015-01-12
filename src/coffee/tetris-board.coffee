@@ -126,16 +126,23 @@ drawCell = (x, y, color)->
 
 # 盤面と操作ブロックを描画する
 render = ()->
-  # 一度キャンバスを真っさらにする
+  resetCanvas()
+  renderBoard()
+  renderBlock()
+
+# キャンバスを真っさらにする
+resetCanvas = ()->
   ctx.clearRect( 0, 0, W, H )
   # えんぴつの色を黒にする
   ctx.strokeStyle = 'black'
 
-  # 盤面を描画する
+# 盤面を描画する
+renderBoard = ()->
   board.eachCell (y, x, cell)->
     drawCell(x, y, cell) if cell
 
-  # 操作ブロックを描画する
+# 操作ブロックを描画する
+renderBlock = ()->
   currentBlock.eachCell (y, x, cell)->
     return unless cell
     drawCell(currentX + x, currentY + y, currentBlock.color)
