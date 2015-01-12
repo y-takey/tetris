@@ -41,6 +41,12 @@ class Board
     return false if @cells[y][x]
     true
 
+  # 着地
+  land: (y, x, block)->
+    block.eachCell (offsetY, offsetX, cell)=>
+      return unless cell
+      @cells[y + offsetY][x + offsetX] = block.color
+
 # // 指定された方向に、操作ブロックを動かせるかどうかチェックする
 # // ゲームオーバー判定もここで行う
 valid = (offsetX = 0, offsetY = 0, newCurrent = currentBlock)->
@@ -61,12 +67,6 @@ valid = (offsetX = 0, offsetY = 0, newCurrent = currentBlock)->
 
   true
 
-# 操作ブロックを盤面にセットする関数
-freeze = ()->
-  currentBlock.eachCell (y, x, cell)->
-    return unless cell
-    board[ y + currentY ][ x + currentX ] = currentBlock.color
-
 moveLeft = ()->
   return unless valid(-1)
   --currentX
@@ -85,7 +85,7 @@ moveDown = ()->
 
   # もし着地していたら(１つしたにブロックがあったら)
   # 操作ブロックを盤面へ固定する
-  freeze()
+  board.land(currentY, currentX, currentBlock)
   # ライン消去処理
   clearLines()
   render()
