@@ -78,16 +78,19 @@ valid = (offsetX = 0, offsetY = 0, newCurrent = currentBlock)->
   true
 
 moveLeft = ()->
+  return unless currentBlock
   return unless valid(-1)
   --currentX
   render()
 
 moveRight = ()->
+  return unless currentBlock
   return unless valid(1)
   ++currentX
   render()
 
 moveDown = ()->
+  return unless currentBlock
   # １つ下へ移動する
   if valid(0, 1)
     ++currentY
@@ -98,12 +101,14 @@ moveDown = ()->
   # もし着地していたら(１つしたにブロックがあったら)
   # 操作ブロックを盤面へ固定する
   clearLines = board.land(currentY, currentX, currentBlock)
+  currentBlock = null
   # 消滅サウンドを鳴らす
   clearSound.play() if clearLines
   render()
   false
 
 rotate = ()->
+  return unless currentBlock
   rotated = currentBlock.rotate()
   return unless valid(0, 0, rotated)
 
@@ -136,7 +141,7 @@ renderBoard = ()->
 
 # 操作ブロックを描画する
 renderBlock = ()->
-  currentBlock.eachCell (y, x, cell)->
+  currentBlock?.eachCell (y, x, cell)->
     return unless cell
     drawCell(currentX + x, currentY + y, currentBlock.color)
 
