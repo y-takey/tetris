@@ -73,11 +73,6 @@ valid = (offsetX = 0, offsetY = 0, newCurrent = currentBlock)->
 
       continue unless newCurrent.cells[y][x]
       continue if board.isEmpty(y + offsetY, x + offsetX)
-
-      # もし操作ブロックが盤面の上にあったらゲームオーバー
-      if (offsetY == 1 && offsetX - currentX == 0 && offsetY - currentY == 1)
-        throw new Error("game over");
-
       return false
 
   true
@@ -97,6 +92,8 @@ moveDown = ()->
   if valid(0, 1)
     ++currentY
     return true
+
+  throw new Error("game over") if currentY == 0
 
   # もし着地していたら(１つしたにブロックがあったら)
   # 操作ブロックを盤面へ固定する
