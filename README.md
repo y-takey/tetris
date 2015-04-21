@@ -2,7 +2,7 @@ A very simple HTML5 version of Tetris.
 
 Based by:
 * http://coderecipe.jp/recipe/iHjJBJx9Si/
-* https://github.com/ottatiyarou/canvas-tetris
+* https://github.com/ottati/canvas-tetris
 
 Improvements from original
 =======
